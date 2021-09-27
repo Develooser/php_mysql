@@ -53,32 +53,24 @@
             echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ")";
         }
 
-        if (isset($_POST['user'])){
-        if ($result = $mysqli->query("SELECT * FROM users WHERE user = $_POST['user']")){
+        if (isset($_POST['user']) && isset($_POST['password'])){
+            if ($result = $mysqli->query( "SELECT * FROM users WHERE user = ' ".$_POST['user']."'")){
 
-                if ($result == $_POST['user']){
-                    $identificador = 1;
-                    if(isset($_POST['password'])){
-                        if ($usuario['password'] == $_POST['password']){
-                            echo "<p>Se ha iniciado sesión correctamente</p>";
-                    
-                        } else {
-                            echo "<p>Contraseña incorrecta</p>";
-                        }
-                    }                
-                }
+                if($row=$result-> fetch_assoc()){
+                    if($row['password'] == $_POST['password']){
+                        echo "Sesión iniciada";
+                    }
+                }            
             }
         }
 
-        if ($identificador == 0){
-            echo "<p>No existe el usuario</p>";
-        }
+        
 
     ?>
 
     <form method= "POST" action="index.php">
-        <input type="text" name="user" placeholder= "usuario"/>
-        <input type="password" name="password" placeholder= "contraseña"/>
+        <input type="text" name="user" placeholder= "usuario" required/>
+        <input type="password" name="password" placeholder= "contraseña" required/>
         <input type="submit"/>
     </form>
 </body>
